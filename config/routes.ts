@@ -29,6 +29,18 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/list',
+    name: 'list',
+    icon: 'smile',
+    component: './List',
+  },
+  {
+    path: '/edit',
+    name: 'edit',
+    icon: 'smile',
+    component: './Edit',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

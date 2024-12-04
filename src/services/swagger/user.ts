@@ -55,7 +55,7 @@ export async function deleteUser(
   });
 }
 
-/** Creates list of users with given input array POST /user/createWithArray */
+/** Creates List of users with given input array POST /user/createWithArray */
 export async function createUsersWithArrayInput(
   body: API.User[],
   options?: { [key: string]: any },
@@ -67,7 +67,7 @@ export async function createUsersWithArrayInput(
   });
 }
 
-/** Creates list of users with given input array POST /user/createWithList */
+/** Creates List of users with given input array POST /user/createWithList */
 export async function createUsersWithListInput(body: API.User[], options?: { [key: string]: any }) {
   return request<any>('/user/createWithList', {
     method: 'POST',
