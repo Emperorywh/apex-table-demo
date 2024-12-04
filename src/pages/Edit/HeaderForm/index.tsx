@@ -25,7 +25,7 @@ const HeaderForm: React.FC = () => {
         autoComplete="off"
         form={form}
     >
-        <Form.Item<FieldType>
+        <Form.Item
             label="单据编号"
             name="billCode"
             rules={[{ required: true, message: '请输入单据编号' }]}
@@ -34,7 +34,7 @@ const HeaderForm: React.FC = () => {
         </Form.Item>
         
         <div className="header_form_container">
-            <Form.Item<FieldType>
+            <Form.Item
                 label="单据日期"
                 name="billDate"
                 rules={[{ required: true, message: '请选择单据日期' }]}
@@ -42,7 +42,7 @@ const HeaderForm: React.FC = () => {
                 <DatePicker style={{ width: '100%' }} placeholder="请选择单据日期"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="仓库"
                 name="kFullName"
                 rules={[{ required: true, message: '请选择仓库' }]}
@@ -50,7 +50,7 @@ const HeaderForm: React.FC = () => {
                 <Input placeholder="请选择仓库"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="经手人"
                 name="eFullName"
                 rules={[{ required: true, message: '请选择经手人' }]}
@@ -58,7 +58,7 @@ const HeaderForm: React.FC = () => {
                 <Input placeholder="请选择经手人"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="入库类型"
                 name="inOutTypeId"
                 rules={[{ required: true, message: '请选择入库类型' }]}
@@ -66,63 +66,63 @@ const HeaderForm: React.FC = () => {
                 <Input placeholder="请选择入库类型"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="往来单位"
                 name="bFullName"
             >
                 <Input placeholder="请选择往来单位"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="部门"
                 name="dFullName"
             >
                 <Input placeholder="请选择部门"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="到货日期"
                 name="preInDate"
             >
                 <DatePicker style={{ width: '100%' }} placeholder="请选择到货日期"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="联系人"
                 name="person"
             >
                 <Input placeholder="请输入联系人"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="联系电话"
                 name="tel"
             >
                 <Input placeholder="请输入联系电话"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="联系地址"
                 name="address"
             >
                 <Input placeholder="请输入联系地址"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="承运单位"
                 name="deliveryName"
             >
                 <Input placeholder="请选择承运单位"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="物流单号"
                 name="expressNo"
             >
                 <Input placeholder="请输入物流单号"/>
             </Form.Item>
             
-            <Form.Item<FieldType>
+            <Form.Item
                 label="原单据编号"
                 name="sourceBillCode"
             >
