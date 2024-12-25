@@ -1,9 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from "./index.less";
 import HeaderForm from '@/pages/Edit/HeaderForm'
 import { ApexTable } from 'apex-table'
 import { ApexTableRef, IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
-import { Button, Space } from 'antd'
+import { Button, Form, Space } from 'antd'
+import { useParams } from 'umi';
+import { getInstockPlanByOrder } from '@/services/apis/TestApi'
+import dayjs from 'dayjs'
 
 
 /**
@@ -12,12 +15,36 @@ import { Button, Space } from 'antd'
  */
 const Edit: React.FC = () => {
     
+    const params = useParams();
+    
+    const [headerForm] = Form.useForm();
+    
     const apexTableRef = useRef<ApexTableRef>();
     
     /**
      * 数据源
      */
     const [dataSource, setDataSource] = useState<any[]>([]);
+    
+    /**
+     * 获取数据源
+     */
+    const onGetDataSource = async () => {
+        const { billIndexId = 0 } = params;
+        if (isNaN(Number.parseInt(billIndexId as any))) return;
+        const response = await getInstockPlanByOrder({ id: billIndexId });
+        if (response.status === 200 && response?.data?.isSuccess) {
+            const { data } = response.data;
+            setDataSource(data.detailDataOutput);
+            const formData = {
+                ...data,
+                detailDataOutput: []
+            }
+            formData.billDate = dayjs(formData.billDate);
+            formData.preInDate = formData.preInDate ? dayjs(formData.preInDate) : '';
+            headerForm.setFieldsValue(formData)
+        }
+    }
     
     /**
      * 表格列
@@ -178,9 +205,13 @@ const Edit: React.FC = () => {
             name: 'remark',
         },
     ]);
-   
+    
+    useEffect(() => {
+        onGetDataSource();
+    }, [])
+    
     return <div className={styles.container}>
-        <HeaderForm />
+        <HeaderForm headerForm={headerForm}/>
         <ApexTable
             ref={apexTableRef}
             columns={columns}
@@ -188,6 +219,7 @@ const Edit: React.FC = () => {
             rowKey='detailId'
             rowHeight={40}
             height={450}
+            allowRowAddDel
         />
     </div>;
 };

@@ -35,7 +35,7 @@ export default [
     component: './List',
   },
   {
-    path: '/edit',
+    path: '/edit/:billIndexId',
     name: 'edit',
     icon: 'smile',
     component: './Edit',

@@ -1,20 +1,20 @@
 import React from 'react';
-import { DatePicker, Form, FormProps, Input } from 'antd'
-import { FieldType } from '@/pages/Edit/HeaderForm/index.types'
+import { Button, DatePicker, Form, FormProps, Input, Space } from 'antd'
+import { IProps } from '@/pages/Edit/HeaderForm/index.types'
 import "./index.less"
 
 /**
  * 顶部表头
  * @constructor
  */
-const HeaderForm: React.FC = () => {
-    const [form] = Form.useForm();
+const HeaderForm: React.FC = (props: IProps) => {
+    const { headerForm } = props;
     
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps['onFinish'] = (values) => {
         console.log('Success:', values);
     };
     
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed: FormProps['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
     
@@ -23,15 +23,26 @@ const HeaderForm: React.FC = () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
-        form={form}
+        form={headerForm}
     >
-        <Form.Item
-            label="单据编号"
-            name="billCode"
-            rules={[{ required: true, message: '请输入单据编号' }]}
-        >
-            <Input style={{ width: '30%' }} placeholder="请输入单据编号"/>
-        </Form.Item>
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        }}>
+            <Form.Item
+                label="单据编号"
+                name="billCode"
+                rules={[{ required: true, message: '请输入单据编号' }]}
+            >
+                <Input style={{ width: 225 }} placeholder="请输入单据编号"/>
+            </Form.Item>
+            <Space style={{ marginBottom: 12, paddingRight: 20 }}>
+                <Button danger>新增</Button>
+                <Button type="primary">审核提交</Button>
+            </Space>
+        </div>
+        
         
         <div className="header_form_container">
             <Form.Item

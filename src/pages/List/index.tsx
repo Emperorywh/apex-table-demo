@@ -5,7 +5,7 @@ import { Button, Space } from 'antd'
 import { ApexTable } from 'apex-table'
 import { ApexTableRef, IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
 import { getInstockPlanList } from '@/services/apis/TestApi'
-
+import { history } from 'umi';
 
 /**
  * 列表页
@@ -13,6 +13,44 @@ import { getInstockPlanList } from '@/services/apis/TestApi'
  */
 const List: React.FC = () => {
     const apexTableRef = useRef<ApexTableRef>();
+    
+    /**
+     * 修改
+     */
+    const handleEdit = (row: any) => {
+        history.push(`/edit/${row.billIndexId}`)
+    }
+    
+    
+    /**
+     * 获取数据源
+     * @param params
+     */
+    const getDataSource = async (params) => {
+        const { pageSize = 10, currentPage = 1 } = params;
+        const requestData = {
+            pageSize,
+            pageIndex: currentPage
+        }
+        const response = await getInstockPlanList(requestData);
+        const dataSource = {
+            data: [],
+            success: true,
+            total: 0
+        }
+        if (response.status === 200) {
+            const {
+                data = {
+                    count: 0,
+                    pageData: []
+                }
+            } = response.data;
+            dataSource.data = data.pageData;
+            dataSource.total = data.count;
+        }
+        return dataSource;
+    }
+    
     
     /**
      * 表格列
@@ -24,7 +62,7 @@ const List: React.FC = () => {
             columnType: 'customer',
             onFormatter: (row) => {
                 return <Space>
-                    <Button type="link">修改</Button>
+                    <Button type="link" onClick={() => handleEdit(row)}>修改</Button>
                 </Space>
             }
         },
@@ -36,6 +74,7 @@ const List: React.FC = () => {
         {
             title: '计划单编号',
             name: 'billCode',
+            width: 200
         },
         {
             title: '原单据编号',
@@ -139,6 +178,7 @@ const List: React.FC = () => {
         {
             title: '制单时间',
             name: 'createTime',
+            width: 200
         },
         {
             title: '备注',
@@ -171,35 +211,6 @@ const List: React.FC = () => {
         }
     ]);
     
-    /**
-     * 获取数据源
-     * @param params
-     */
-    const getDataSource = async (params) => {
-        const { pageSize = 10, currentPage = 1 } = params;
-        const requestData = {
-            pageSize,
-            pageIndex: currentPage
-        }
-        const response = await getInstockPlanList(requestData);
-        const dataSource = {
-            data: [],
-            success: true,
-            total: 0
-        }
-        if (response.status === 200) {
-            const {
-                data = {
-                    count: 0,
-                    pageData: []
-                }
-            } = response.data;
-            dataSource.data = data.pageData;
-            dataSource.total = data.count;
-        }
-        return dataSource;
-    }
-    
     return <div className={styles.container}>
         <HeaderForm/>
         <ApexTable
@@ -216,6 +227,7 @@ const List: React.FC = () => {
             allowResize
             showSummary
             showLineNumber
+            readOnly
         />
     </div>;
 };
