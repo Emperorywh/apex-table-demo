@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { IProps } from '@/components/KFullName/index.types';
 import styles from "./index.less";
-import { Button, Form, Input, Space } from 'antd'
+import { Button, Form, Input, message, Space } from 'antd'
 import { ApexTable } from 'apex-table'
-import { IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
+import { ApexTableRef, IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
 import { getKFullNameList } from '@/services/apis/TestApi'
 
 /**
@@ -11,6 +11,10 @@ import { getKFullNameList } from '@/services/apis/TestApi'
  * @constructor
  */
 const KFullName: React.FC = (props: IProps) => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const { onOk, onCancel } = props;
+    
+    const apexTableRef = useRef<ApexTableRef>();
     
     /**
      * 获取数据源
@@ -40,6 +44,29 @@ const KFullName: React.FC = (props: IProps) => {
         }
         return dataSource;
     }
+    
+    /**
+     * 点击取消
+     */
+    const handleCancel = () => {
+        onCancel?.();
+    }
+    
+    /**
+     * 点击确定
+     */
+    const handleOk = () => {
+        const selectedArray = apexTableRef.current?.getDataSource() || [];
+        if (selectedArray?.length === 0) {
+            messageApi.open({
+                type: 'warning',
+                content: '请选择仓库！',
+            });
+            return;
+        }
+        onOk?.(selectedArray);
+    }
+    
     
     const [columns, setColumns] = useState<IApexTableColumns<any>[]>([
         {
@@ -78,24 +105,29 @@ const KFullName: React.FC = (props: IProps) => {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
-            // initialValues={{ remember: true }}
-            // onFinish={onFinish}
-            // onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
-            <Form.Item
-                name="keyWord"
-            >
-                <Input placeholder="仓库编号/名称"/>
-            </Form.Item>
-            
-            <Form.Item>
-                <Space>
-                    <Button danger>搜索</Button>
-                </Space>
-            </Form.Item>
+            <div style={{
+                display: 'flex'
+            }}>
+                <Form.Item
+                    name="keyWord"
+                >
+                    <Input placeholder="仓库编号/名称" style={{ width: 200 }}/>
+                </Form.Item>
+                
+                <Form.Item>
+                    <Space style={{ marginLeft: 10 }}>
+                        <Button danger>搜索</Button>
+                    </Space>
+                </Form.Item>
+            </div>
+        
         </Form>
         <ApexTable
+            ref={apexTableRef}
+            allowSelect
+            showHeaderCheckBox
             columns={columns}
             request={getDataSource}
             rowHeight={40}
@@ -106,6 +138,12 @@ const KFullName: React.FC = (props: IProps) => {
             }}
             readOnly
         />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Space size={50}>
+                <Button onClick={handleCancel}>取消</Button>
+                <Button type="primary" onClick={handleOk}>确定</Button>
+            </Space>
+        </div>
     </div>
 };
 

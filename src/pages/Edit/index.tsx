@@ -3,10 +3,11 @@ import styles from "./index.less";
 import HeaderForm from '@/pages/Edit/HeaderForm'
 import { ApexTable } from 'apex-table'
 import { ApexTableRef, IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
-import { Button, Form, Space } from 'antd'
+import { Form } from 'antd'
 import { useParams } from 'umi';
 import { getInstockPlanByOrder } from '@/services/apis/TestApi'
 import dayjs from 'dayjs'
+import KFullName from '@/components/KFullName'
 
 
 /**
@@ -62,18 +63,20 @@ const Edit: React.FC = () => {
                 return {
                     title: '仓库信息',
                     width: '50vw',
-                    content: <div>
-                        <h1>仓库列表</h1>
-                        <div>{value}</div>
-                        <Space>
-                            <Button onClick={() => {
-                                modalRef.current?.destroy();
-                            }}>取消</Button>
-                            <Button type='primary' onClick={() => {
-                                modalRef.current?.destroy();
-                            }}>确定</Button>
-                        </Space>
-                    </div>
+                    destroyOnClose: true,
+                    content: <KFullName
+                        onOk={data => {
+                            apexTableRef.current?.updateRow(row.detailId, {
+                                ...row,
+                                kid: data[1].kid,
+                                kFullName: data[1].kFullName
+                            })
+                            modalRef.current?.destroy();
+                        }}
+                        onCancel={() => {
+                            modalRef.current?.destroy();
+                        }}
+                    />
                 }
             }
         },
@@ -220,6 +223,7 @@ const Edit: React.FC = () => {
             rowHeight={40}
             height={450}
             allowRowAddDel
+            allowResize
         />
     </div>;
 };
