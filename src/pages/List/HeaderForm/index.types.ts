@@ -1,5 +1,3 @@
-export type FieldType = {
-    username?: string;
-    password?: string;
-    remember?: string;
-};
+export interface IProps {
+    onSearch: (params: any) => void;
+}

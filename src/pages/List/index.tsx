@@ -27,10 +27,11 @@ const List: React.FC = () => {
      * @param params
      */
     const getDataSource = async (params) => {
-        const { pageSize = 10, currentPage = 1 } = params;
+        const { pageSize = 10, currentPage = 1, ...args } = params;
         const requestData = {
+            ...args,
             pageSize,
-            pageIndex: currentPage
+            pageIndex: currentPage,
         }
         const response = await getInstockPlanList(requestData);
         const dataSource = {
@@ -49,6 +50,13 @@ const List: React.FC = () => {
             dataSource.total = data.count;
         }
         return dataSource;
+    }
+    
+    /**
+     * 搜索方法
+     */
+    const handleSearch = (params = {}) => {
+        apexTableRef.current?.setRequestParams(params)
     }
     
     
@@ -212,7 +220,7 @@ const List: React.FC = () => {
     ]);
     
     return <div className={styles.container}>
-        <HeaderForm/>
+        <HeaderForm  onSearch={handleSearch}/>
         <ApexTable
             ref={apexTableRef}
             columns={columns}

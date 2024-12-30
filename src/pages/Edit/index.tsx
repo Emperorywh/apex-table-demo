@@ -3,7 +3,6 @@ import styles from "./index.less";
 import HeaderForm from '@/pages/Edit/HeaderForm'
 import { ApexTable } from 'apex-table'
 import { ApexTableRef, IApexTableColumns } from 'apex-table/dist/ApexTable/index.types'
-import { Form } from 'antd'
 import { useParams } from 'umi';
 import { getInstockPlanByOrder } from '@/services/apis/TestApi'
 import dayjs from 'dayjs'
@@ -18,9 +17,9 @@ const Edit: React.FC = () => {
     
     const params = useParams();
     
-    const [headerForm] = Form.useForm();
-    
     const apexTableRef = useRef<ApexTableRef>();
+    
+    const [formData, setFormData] = useState(null);
     
     /**
      * 数据源
@@ -43,8 +42,19 @@ const Edit: React.FC = () => {
             }
             formData.billDate = dayjs(formData.billDate);
             formData.preInDate = formData.preInDate ? dayjs(formData.preInDate) : '';
-            headerForm.setFieldsValue(formData)
+            setFormData(formData);
         }
+    }
+    
+    /**
+     * 审核提交
+     */
+    const handleReviewSubmit = (params) =>  {
+        const jsonData = {
+            ...params,
+            tableList: apexTableRef.current?.getDataSource() || []
+        }
+        console.log("提交的数据", jsonData)
     }
     
     /**
@@ -68,8 +78,8 @@ const Edit: React.FC = () => {
                         onOk={data => {
                             apexTableRef.current?.updateRow(row.detailId, {
                                 ...row,
-                                kid: data[1].kid,
-                                kFullName: data[1].kFullName
+                                kid: data[0].kid,
+                                kFullName: data[0].kFullName
                             })
                             modalRef.current?.destroy();
                         }}
@@ -214,7 +224,10 @@ const Edit: React.FC = () => {
     }, [])
     
     return <div className={styles.container}>
-        <HeaderForm headerForm={headerForm}/>
+        <HeaderForm
+            onReviewSubmit={handleReviewSubmit}
+            formData={formData}
+        />
         <ApexTable
             ref={apexTableRef}
             columns={columns}

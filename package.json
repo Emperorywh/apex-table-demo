@@ -51,7 +51,7 @@
     "@umijs/route-utils": "^2.2.2",
     "antd": "^5.22.3",
     "antd-style": "^3.6.1",
-    "apex-table": "^1.0.3",
+    "apex-table": "^1.0.4",
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",

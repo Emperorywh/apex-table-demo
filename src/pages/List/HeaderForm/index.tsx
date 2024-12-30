@@ -1,22 +1,33 @@
 import React from 'react';
 import { Button, DatePicker, Form, FormProps, Input, Space } from 'antd'
-import { FieldType } from '@/pages/Edit/HeaderForm/index.types'
 import "./index.less"
+import { IProps } from '@/pages/List/HeaderForm/index.types'
 
 /**
  * 顶部表头
  * @constructor
  */
-const HeaderForm: React.FC = () => {
+const HeaderForm: React.FC = (props: IProps) => {
+    
+    const { onSearch } = props;
+    
     const [form] = Form.useForm();
     
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps['onFinish'] = (values) => {
         console.log('Success:', values);
     };
     
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+    const onFinishFailed: FormProps['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+    
+    /**
+     * 搜索
+     */
+    const handleSearch = () => {
+        const formData = form.getFieldsValue();
+        onSearch?.(formData);
+    }
     
     return <Form
         name="basic"
@@ -55,7 +66,7 @@ const HeaderForm: React.FC = () => {
             
             <Form.Item
                 label="往来单位"
-                name="eFullName"
+                name="bFullName"
             >
                 <Input placeholder="请选择往来单位"/>
             </Form.Item>
@@ -75,7 +86,7 @@ const HeaderForm: React.FC = () => {
             </Form.Item>
             
             <Space style={{ marginBottom: 12 }}>
-                <Button type="primary">查询</Button>
+                <Button type="primary" onClick={handleSearch}>查询</Button>
                 <Button color="primary" variant="outlined">新增</Button>
             </Space>
         </div>

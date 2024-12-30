@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, DatePicker, Form, FormProps, Input, Space } from 'antd'
+import React, { useEffect } from 'react';
+import { Button, DatePicker, Form, Input, Space } from 'antd'
 import { IProps } from '@/pages/Edit/HeaderForm/index.types'
 import "./index.less"
 
@@ -8,22 +8,26 @@ import "./index.less"
  * @constructor
  */
 const HeaderForm: React.FC = (props: IProps) => {
-    const { headerForm } = props;
+    const { onReviewSubmit, formData } = props;
     
-    const onFinish: FormProps['onFinish'] = (values) => {
-        console.log('Success:', values);
-    };
+    const [form] = Form.useForm();
     
-    const onFinishFailed: FormProps['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    /**
+     * 审核提交
+     */
+    const handleReviewSubmit = () => {
+        const formData = form.getFieldsValue();
+        onReviewSubmit?.(formData);
+    }
+    
+    useEffect(() => {
+        form.setFieldsValue(formData);
+    }, [formData]);
     
     return <Form
         name="basic"
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
-        form={headerForm}
+        form={form}
     >
         <div style={{
             display: 'flex',
@@ -39,7 +43,7 @@ const HeaderForm: React.FC = (props: IProps) => {
             </Form.Item>
             <Space style={{ marginBottom: 12, paddingRight: 20 }}>
                 <Button danger>新增</Button>
-                <Button type="primary">审核提交</Button>
+                <Button type="primary" onClick={handleReviewSubmit}>审核提交</Button>
             </Space>
         </div>
         

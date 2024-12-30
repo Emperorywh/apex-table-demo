@@ -56,8 +56,9 @@ const KFullName: React.FC = (props: IProps) => {
      * 点击确定
      */
     const handleOk = () => {
-        const selectedArray = apexTableRef.current?.getDataSource() || [];
+        const selectedArray = apexTableRef.current?.getCheckedData() || [];
         if (selectedArray?.length === 0) {
+            debugger
             messageApi.open({
                 type: 'warning',
                 content: '请选择仓库！',
@@ -137,6 +138,7 @@ const KFullName: React.FC = (props: IProps) => {
                 showSizeChanger: true
             }}
             readOnly
+            isSingle
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Space size={50}>
