@@ -139,6 +139,7 @@ const KFullName: React.FC = (props: IProps) => {
             }}
             readOnly
             isSingle
+            selectByRowClick
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Space size={50}>
